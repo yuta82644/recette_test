@@ -5,25 +5,28 @@
 <%= link_to "新しいレシピを投稿する", new_recipe_path, class: "btn btn-primary mb-4" %>
 
 <% @recipes.each do |recipe| %>
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title"><%= recipe.title %></h5>
-      <p class="card-text"><%= recipe.short_comment %></p>
-      <%= link_to "詳細を見る", recipe_path(recipe), class: "btn btn-info" %>
+  <div class="recipe-card">
+    <div class="recipe-body">
+      <h5 class="recipe-title"><%= recipe.title %></h5>
+      <p class="recipe-short-comment"><%= recipe.short_comment %></p>
 
       <h2>材料</h2>
       <% recipe.cooking_ingredients.each do |ingredient| %>
-        <div>
+        <div class="recipe-ingredient">
           <%= ingredient.ingredient_name %> - <%= ingredient.quantity %> <%= ingredient.unit %>
         </div>
       <% end %>
 
       <h2>手順</h2>
       <% recipe.procedures.each do |step| %>
-        <div>
+        <div class="recipe-procedure">
           <%= step.procedure_comment %>
         </div>
       <% end %>
+
+      <%= link_to "詳細を見る", recipe_path(recipe), class: "recipe-link" %>
+      <%= link_to "編集", edit_recipe_path(recipe), class: "recipe-link" %>
+       <%= link_to "削除", recipe_path(recipe), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger", remote: true %>
     </div>
   </div>
 <% end %>
