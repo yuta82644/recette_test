@@ -19,26 +19,18 @@
   </div>
 
   <h2>材料</h2>
-  <%= f.fields_for :cooking_ingredients do |ingredient| %>
-    <div class="form-group">
-      <%= ingredient.label :ingredient_name %>
-      <%= ingredient.text_field :ingredient_name, class: "form-control" %>
-    </div>
+  <div id="cooking_ingredients">
+    <%= f.fields_for :cooking_ingredients do |ingredient| %>
+      <%= render 'cooking_ingredient_fields', f: ingredient %>
+    <% end %>
 
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <%= ingredient.label :quantity %>
-        <%= ingredient.number_field :quantity, class: "form-control" %>
-      </div>
-
-      <div class="form-group col-md-4">
-        <%= ingredient.label :unit %>
-        <%= ingredient.text_field :unit, class: "form-control" %>
-      </div>
-    </div>
-  <% end %>
-
-  <%= link_to_add_fields "材料の追加", f, :cooking_ingredients %>
+    <% # デフォルトで5つの材料を表示する %>
+    <% (5 - @recipe.cooking_ingredients.size).times do %>
+      <%= f.fields_for :cooking_ingredients, CookingIngredient.new do |ingredient| %>
+        <%= render 'cooking_ingredient_fields', f: ingredient %>
+      <% end %>
+    <% end %>
+  </div>
 
   <h2>手順</h2>
   <%= f.fields_for :procedures do |step| %>
@@ -48,23 +40,7 @@
     </div>
   <% end %>
 
-  <%= link_to_add_fields "手順の追加", f, :procedures %>
-
-  <div class="form-group">
-    <%= f.label :cooking_introduction %>
-    <%= f.text_area :cooking_introduction, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :recipe_image %>
-    <%= f.file_field :recipe_image, accept: "image/jpeg,image/gif,image/png", class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :serving %>
-    <%= f.number_field :serving, class: "form-control" %>
-  </div>
-
+  
   <div class="actions">
     <%= f.submit "レシピを投稿する", class: "btn btn-primary" %>
   </div>
