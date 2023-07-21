@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
-  resources :recipe
-
+  resources :recipes
+  
+  devise_for :users
+  resources :rooms, only: [:new, :index, :show, :create, :edit, :update]
 end

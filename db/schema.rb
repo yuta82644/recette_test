@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_20_044619) do
+ActiveRecord::Schema.define(version: 2023_07_21_044841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,23 @@ ActiveRecord::Schema.define(version: 2023_07_20_044619) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "room_assigns", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "room_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["room_id"], name: "index_room_assigns_on_room_id"
+    t.index ["user_id"], name: "index_room_assigns_on_user_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "name"
+    t.text "introduction"
+    t.integer "owner_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -54,4 +71,6 @@ ActiveRecord::Schema.define(version: 2023_07_20_044619) do
 
   add_foreign_key "cooking_ingredients", "recipes"
   add_foreign_key "procedures", "recipes"
+  add_foreign_key "room_assigns", "rooms"
+  add_foreign_key "room_assigns", "users"
 end
