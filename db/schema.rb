@@ -42,6 +42,16 @@ ActiveRecord::Schema.define(version: 2023_07_20_044619) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   add_foreign_key "cooking_ingredients", "recipes"
   add_foreign_key "procedures", "recipes"
 end
