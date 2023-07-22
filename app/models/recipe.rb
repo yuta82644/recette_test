@@ -4,4 +4,6 @@ class Recipe < ApplicationRecord
   belongs_to :room
   accepts_nested_attributes_for :procedures, allow_destroy: true
   accepts_nested_attributes_for :cooking_ingredients, allow_destroy: true
+
+  attr_accessor :public_post
 end
