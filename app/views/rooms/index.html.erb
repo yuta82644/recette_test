@@ -11,3 +11,13 @@
   <% end %>
 <% end %>
 
+<% if room.recipes.any? %>
+    <ul>
+      <% room.recipes.each do |recipe| %>
+        <li><%= recipe.title %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>レシピはありません。</p>
+  <% end %>
+<% end %>

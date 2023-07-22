@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_21_044841) do
+ActiveRecord::Schema.define(version: 2023_07_22_061103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 2023_07_21_044841) do
     t.text "tortal_quantity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "room_id"
+    t.boolean "public", default: true
   end
 
   create_table "room_assigns", force: :cascade do |t|

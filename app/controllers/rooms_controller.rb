@@ -1,14 +1,15 @@
 # app/controllers/rooms_controller.rb
 
 class RoomsController < ApplicationController
-  def index
+
+
+   def index
     if user_signed_in?
       @user_rooms = current_user.rooms
-    else    
+    else
       @user_rooms = []
     end
   end
-
   def new
     @room = Room.new
   end

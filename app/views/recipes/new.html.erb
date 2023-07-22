@@ -49,6 +49,13 @@
     </div>
   <% end %>
 
+  <% if @user_rooms.any? %>
+    <div class="field">
+      <%= f.label :room_id, "ルームを選択" %>
+      <%= f.collection_select(:room_id, @user_rooms, :id, :name, prompt: "選択してください") %>
+    </div>
+  <% end %>
+
   <div class="actions">
     <%= f.submit "レシピを投稿する", class: "btn btn-primary" %>
   </div>
