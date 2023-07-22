@@ -13,6 +13,9 @@
 
   <body>
     <div>あなたの名前: <%= current_user&.name %></div>
+     <% if @room %>
+    <%= link_to "ルームに入る", rooms_path(@room), class: "btn btn-primary" %>
+  <% end %>
   
     <% if user_signed_in? %>
       <%= link_to "ブログ投稿", recipes_path %>

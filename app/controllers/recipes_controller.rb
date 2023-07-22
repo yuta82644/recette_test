@@ -1,7 +1,9 @@
 class RecipesController < ApplicationController
 
-  def index
+ 
+    def index
     @recipes = Recipe.all
+    @user_rooms = user_signed_in? ? current_user.rooms : nil
   end
   def new
     @recipe = Recipe.new

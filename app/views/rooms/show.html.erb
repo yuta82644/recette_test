@@ -1,0 +1,26 @@
+<!-- app/views/rooms/show.html.erb -->
+
+<h1>roomshow</h1>
+<h1><%= @room.name %> のルームページ</h1>
+
+<h2>メンバー一覧</h2>
+
+<% if @members.any? %>
+  <ul>
+    <% @members.each do |member| %>
+      <li><%= member.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>メンバーはいません。</p>
+<% end %>
+
+
+<!-- グループ招待用フォーム -->
+
+
+
+
+
+<h2>編集ページで招待出来る</h2>
+<%= link_to "編集", edit_room_path(@room) %>

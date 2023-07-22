@@ -29,4 +29,16 @@
        <%= link_to "削除", recipe_path(recipe), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger", remote: true %>
     </div>
   </div>
+
 <% end %>
+
+<% if current_user && current_user.rooms.any? %>
+  <h2>所属しているルーム</h2>
+  <ul>
+    <% current_user.rooms.each do |room| %>
+      <li><%= link_to room.name, room_path(room) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to "新しいルーム作成", new_room_path %>

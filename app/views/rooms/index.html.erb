@@ -1,0 +1,13 @@
+<!-- app/views/rooms/index.html.erb -->
+<h1>Rooms List</h1>
+
+<% if @user_rooms.present? %>
+  <h3>Your Rooms:</h3>
+  <% @user_rooms.each do |room| %>
+    <div class="room-card">
+      <h4><%= room.name %></h4>
+      <!-- その他のルームの詳細をここに表示する -->
+    </div>
+  <% end %>
+<% end %>
+

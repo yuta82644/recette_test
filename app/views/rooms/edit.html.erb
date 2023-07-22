@@ -1,0 +1,44 @@
+<h1><%= @room.name %> のルームページ</h1>
+
+<h2>メンバー一覧</h2>
+
+<% if @members.any? %>
+  <ul>
+    <% @members.each do |member| %>
+      <li><%= member.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>メンバーはいません。</p>
+<% end %>
+
+<!-- グループ情報編集用フォーム -->
+<%= form_with(model: @room) do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :introduction %>
+    <%= f.text_area :introduction %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新する", class: "btn btn-primary" %>
+    <%= link_to "ルームに戻る", room_path(@room), class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<!-- グループにメンバーを招待するフォーム -->
+ <%= form_with(model: @room, url: room_path(@room), local: true) do |invite_form| %>
+  <h2>グループにメンバーを招待</h2>
+  <div class="field">
+    <%= invite_form.label :invite_name, "ユーザー名" %>
+    <%= invite_form.text_field :invite_name %>
+  </div>
+
+  <div class="actions">
+    <%= invite_form.submit "招待する", class: "btn btn-primary" %>
+  </div>
+<% end %>
