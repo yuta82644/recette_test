@@ -1,7 +1,12 @@
 class RecipesController < ApplicationController
   def index
-    @recipes = Recipe.all
-    @user_rooms = user_signed_in? ? current_user.rooms : []
+    if params[:room_id]
+      @recipes = Recipe.where(room_id: params[:room_id], public: true)
+    else
+      @recipes = Recipe.where(public: true)
+    end
+
+    @user_rooms = user_signed_in? ? current_user.rooms : nil
   end
 
   def new
@@ -13,10 +18,11 @@ class RecipesController < ApplicationController
   def create
     @recipe = Recipe.new(recipe_params)
 
-    # レシピ作成時にルームを選択した場合、そのルームに紐付ける
-    if params[:recipe][:room_id].present?
-      room = current_user.rooms.find_by(id: params[:recipe][:room_id])
-      @recipe.room = room if room
+      if params[:commit] == "公開で投稿"
+      @recipe.public = true
+    else
+      @recipe.public = false
+      @recipe.room = current_user.rooms.find_by(id: params[:recipe][:room_id])
     end
 
     if @recipe.save
@@ -57,6 +63,7 @@ class RecipesController < ApplicationController
       :title,
       :tortal_quantity,
       :image,
+      :public, # レシピに公開設定を保存するためのパラメータを追加
       :room_id, # レシピにルームIDを保存するためのパラメータを追加
       procedures_attributes: [:procedure_comment, :_destroy],
       cooking_ingredients_attributes: [:ingredient_name, :quantity, :unit, :_destroy]

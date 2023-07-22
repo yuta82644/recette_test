@@ -18,6 +18,8 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
     @user_rooms = current_user.rooms
     @members = @room.users
+
+    @recipes = @room.recipes
   end
 
   def create

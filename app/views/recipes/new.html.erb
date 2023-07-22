@@ -4,17 +4,14 @@
     <%= f.label :title %>
     <%= f.text_field :title, class: "form-control" %>
   </div>
-
   <div class="form-group">
     <%= f.label :short_comment %>
     <%= f.text_area :short_comment, class: "form-control" %>
   </div>
-
   <div class="form-group">
     <%= f.label :tortal_quantity %>
     <%= f.text_area :tortal_quantity, class: "form-control" %>
   </div>
-
   <h2>材料</h2>
   <div id="cooking_ingredients">
     <%= f.fields_for :cooking_ingredients do |ingredient| %>
@@ -23,24 +20,19 @@
           <%= ingredient.label :ingredient_name %>
           <%= ingredient.text_field :ingredient_name, class: "form-control" %>
         </div>
-
         <div class="form-group">
           <%= ingredient.label :quantity %>
           <%= ingredient.number_field :quantity, class: "form-control" %>
         </div>
-
         <div class="form-group">
           <%= ingredient.label :unit %>
           <%= ingredient.text_field :unit, class: "form-control" %>
         </div>
-
         <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">削除</button>
       </div>
     <% end %>
   </div>
-
   <button type="button" class="btn btn-primary" id="addIngredient">材料を追加</button>
-
   <h2>手順</h2>
   <%= f.fields_for :procedures do |step| %>
     <div class="form-group">
@@ -49,16 +41,18 @@
     </div>
   <% end %>
 
-  <% if @user_rooms.any? %>
-    <div class="field">
-      <%= f.label :room_id, "ルームを選択" %>
-      <%= f.collection_select(:room_id, @user_rooms, :id, :name, prompt: "選択してください") %>
-    </div>
-  <% end %>
+  <%= f.submit "公開で投稿", name: "commit", class: "btn btn-success" %>
 
-  <div class="actions">
-    <%= f.submit "レシピを投稿する", class: "btn btn-primary" %>
+  <!-- ルーム選択ボタン用のフォーム -->
+  <div class="field">
+    <%= f.label :room_id, "ルームを選択" %>
+    <%= f.collection_select(:room_id, @user_rooms, :id, :name, { prompt: "ルームを選択してください" }, { class: "form-control" }) %>
   </div>
+
+  <%= f.submit "公開で投稿", name: "commit", class: "btn btn-success" %>
+  <%= f.submit "ルームを選択して投稿", name: "commit", class: "btn btn-info" %>
+</form>
+
 <% end %>
 
 <script>
