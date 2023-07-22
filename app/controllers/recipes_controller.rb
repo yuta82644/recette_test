@@ -1,4 +1,6 @@
 class RecipesController < ApplicationController
+  before_action :authenticate_user!, only: [:my_recipes]
+
   def index
     if params[:room_id]
       @recipes = Recipe.where(room_id: params[:room_id], public: true)
@@ -18,12 +20,14 @@ class RecipesController < ApplicationController
   def create
     @recipe = Recipe.new(recipe_params)
 
-      if params[:commit] == "公開で投稿"
+    if params[:recipe][:public_post]
       @recipe.public = true
-    else
+    elsif params[:recipe][:room_post]
       @recipe.public = false
       @recipe.room = current_user.rooms.find_by(id: params[:recipe][:room_id])
     end
+
+    @user_rooms = user_signed_in? ? current_user.rooms : []
 
     if @recipe.save
       redirect_to recipes_path, notice: "レシピを投稿しました！"
@@ -49,6 +53,10 @@ class RecipesController < ApplicationController
     end
   end
 
+  def my_recipes
+    @user_recipes = current_user.recipes
+  end
+
   def destroy
     @recipe = Recipe.find(params[:id])
     @recipe.destroy
@@ -68,5 +76,10 @@ class RecipesController < ApplicationController
       procedures_attributes: [:procedure_comment, :_destroy],
       cooking_ingredients_attributes: [:ingredient_name, :quantity, :unit, :_destroy]
     )
+  end
+
+  def public_post?
+    # フォームから送信されたパラメーターにrecipe[public_post]が存在するかをチェック
+    params["recipe"] && params["recipe"]["public_post"].present?
   end
 end

@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
          has_many :room_assigns, dependent: :destroy
          has_many :rooms, through: :room_assigns,source: :room
+         has_many :recipes
 end

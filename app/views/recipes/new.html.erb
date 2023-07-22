@@ -1,4 +1,5 @@
 <h1>レシピ投稿</h1>
+<% public_post = @recipe.public_post? %>
 <%= form_with(model: @recipe, local: true) do |f| %>
   <div class="form-group">
     <%= f.label :title %>
@@ -41,20 +42,35 @@
     </div>
   <% end %>
 
-  <%= f.submit "公開で投稿", name: "commit", class: "btn btn-success" %>
+  
 
   <!-- ルーム選択ボタン用のフォーム -->
-  <div class="field">
+  <!-- <div class="field">
     <%= f.label :room_id, "ルームを選択" %>
     <%= f.collection_select(:room_id, @user_rooms, :id, :name, { prompt: "ルームを選択してください" }, { class: "form-control" }) %>
   </div>
 
-  <%= f.submit "公開で投稿", name: "commit", class: "btn btn-success" %>
-  <%= f.submit "ルームを選択して投稿", name: "commit", class: "btn btn-info" %>
+  <%= f.submit "公開で投稿", name: "recipe[public_post]", class: "btn btn-success" %>
+  <%= f.submit "ルームを選択して投稿", name: "recipe[room_post]", class: "btn btn-info" %>
 </form>
 
-<% end %>
+<% end %> -->
 
+
+ <div class="field">
+    <%= f.label :room_id, "ルームを選択" %>
+    <% # 公開で投稿の場合はルームを選択しないため、disabled属性を設定して選択不可にする %>
+    <%= f.collection_select(:room_id, @user_rooms, :id, :name, { prompt: "ルームを選択してください" }, { class: "form-control", disabled: f.object.public_post? }) %>
+  </div>
+
+  <% # 公開で投稿のボタンをクリックした場合は、ルームを選択しないようにhiddenフィールドでroom_idを空にする %>
+  <% if f.object.public_post? %>
+    <%= f.hidden_field :room_id, value: nil %>
+  <% end %>
+
+  <%= f.submit "公開で投稿", name: "recipe[public_post]", class: "btn btn-success" %>
+  <%= f.submit "ルームを選択して投稿", name: "recipe[room_post]", class: "btn btn-info" %>
+</form>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const addButton = document.getElementById("addIngredient");

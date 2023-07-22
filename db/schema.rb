@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_22_061103) do
+ActiveRecord::Schema.define(version: 2023_07_22_084416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 2023_07_22_061103) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "room_id"
     t.boolean "public", default: true
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 
   create_table "room_assigns", force: :cascade do |t|
@@ -73,6 +75,7 @@ ActiveRecord::Schema.define(version: 2023_07_22_061103) do
 
   add_foreign_key "cooking_ingredients", "recipes"
   add_foreign_key "procedures", "recipes"
+  add_foreign_key "recipes", "users"
   add_foreign_key "room_assigns", "rooms"
   add_foreign_key "room_assigns", "users"
 end
