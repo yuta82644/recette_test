@@ -1,7 +1,7 @@
+<!-- room/show.html.erb -->
 <h1><%= @room.name %> のルームページ</h1>
 
 <h2>メンバー一覧</h2>
-
 <% if @members.any? %>
   <ul>
     <% @members.each do |member| %>
@@ -17,27 +17,29 @@
 <% if @recipes.any? %>
   <ul>
     <% @recipes.each do |recipe| %>
-      <li>
-        <h3><%= recipe.title %></h3>
-        <p><%= recipe.short_comment %></p>
+      <% if @room.users.include?(recipe.user) && !recipe.public? %>
+        <li>
+          <h3><%= recipe.title %></h3>
+          <p><%= recipe.short_comment %></p>
 
-        <h4>材料</h4>
-        <% recipe.cooking_ingredients.each do |ingredient| %>
-          <div>
-            <%= ingredient.ingredient_name %> - <%= ingredient.quantity %> <%= ingredient.unit %>
-          </div>
-        <% end %>
+          <h4>材料</h4>
+          <% recipe.cooking_ingredients.each do |ingredient| %>
+            <div>
+              <%= ingredient.ingredient_name %> - <%= ingredient.quantity %> <%= ingredient.unit %>
+            </div>
+          <% end %>
 
-        <h4>手順</h4>
-        <% recipe.procedures.each do |step| %>
-          <div>
-            <%= step.procedure_comment %>
-          </div>
-        <% end %>
+          <h4>手順</h4>
+          <% recipe.procedures.each do |step| %>
+            <div>
+              <%= step.procedure_comment %>
+            </div>
+          <% end %>
 
-        <%= link_to "詳細を見る", recipe_path(recipe) %> |
-        <%= link_to "編集", edit_recipe_path(recipe) %>
-      </li>
+          <%= link_to "詳細を見る", recipe_path(recipe) %> |
+          <%= link_to "編集", edit_recipe_path(recipe) %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 <% else %>
@@ -45,6 +47,5 @@
 <% end %>
 
 <!-- グループ招待用フォーム -->
-
 <h2>編集ページで招待出来る</h2>
 <%= link_to "編集", edit_room_path(@room) %>
