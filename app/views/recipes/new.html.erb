@@ -42,16 +42,20 @@
   <% end %>
 
   
-  <div class="field">
-    <%= f.label :room_id, "ルームを選択" %>
-    <% # 公開で投稿の場合はルームを選択しないため、disabled属性を設定して選択不可にする %>
-    <% # デフォルトで一つ目のオプションを選択するため、selectedオプションに一つ目のオプションを指定 %>
-    <%= f.collection_select(:room_id, @user_rooms, :id, :name, { prompt: "ルームを選択してください", include_blank: true }, { class: "form-control" }) %>
+   <div class="form-group">
+    <%= f.label :public %>
+    <%= f.check_box :public %> <!-- 一般公開のチェックボックスを追加 -->
+  </div>
+  <div class="form-group">
+    <%= f.label :room_id %>
+    <%= f.select :room_id, options_for_select(@user_rooms.pluck(:name, :id)), {}, class: "form-control" %>
+    <!-- ユーザーが所属するルームの選択リストを表示 -->
   </div>
 
-  <%= f.submit "公開で投稿", name: "recipe[public_post]", class: "btn btn-success" %>
-  <%= f.submit "ルームを選択して投稿", name: "recipe[room_post]", class: "btn btn-info" %>
+
+ <%= f.submit "投稿", class: "btn btn-primary" %>
 <% end %>
+
 
 
 <script>

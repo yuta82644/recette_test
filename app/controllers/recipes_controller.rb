@@ -1,16 +1,14 @@
 class RecipesController < ApplicationController
 include RecipesHelper
 
-  before_action :authenticate_user!, only: [:my_recipes]
+  # before_action :authenticate_user!, only: [:my_recipes]
 
   def index
     if params[:room_id]
-      @recipes = Recipe.where(room_id: params[:room_id], public: true)
-    else
-      @recipes = Recipe.where(public: true)
-    end
-
-    @user_rooms = user_signed_in? ? current_user.rooms : nil
+    @room = Room.find(params[:room_id])
+    @recipes = @room.recipes.where(public: true)
+  else
+    @recipes = Recipe.where(public: true)
   end
 
   def new
@@ -21,23 +19,17 @@ include RecipesHelper
   end
 
  def create
-  @recipe = Recipe.new(recipe_params)
-
-  if @recipe.public_post == "1"
-    @recipe.public = true
-    @recipe.room = nil # ルームを選択せずに投稿する場合はroomをnilにする
-  else
-    @recipe.public = false
-  end
-
-  @user_rooms = user_signed_in? ? current_user.rooms : []
-
-  if @recipe.save
-    redirect_to recipes_path, notice: "レシピを投稿しました！"
-  else
-    render :new
-  end
   
+   @recipe = Recipe.new(recipe_params)
+    @recipe.user = current_user # もしユーザーと関連付ける場合は、現在のユーザーを設定します
+
+    if @recipe.save
+      redirect_to recipe_path(@recipe), notice: "レシピを投稿しました！"
+    else
+      # @user_rooms = current_user.rooms
+      render :new
+    end
+  end
 end
   def show
     @recipe = Recipe.find(params[:id])
@@ -77,14 +69,16 @@ end
       :public, # レシピに公開設定を保存するためのパラメータを追加
       :room_id, # レシピにルームIDを保存するためのパラメータを追加
       :public_post,
+    
       procedures_attributes: [:procedure_comment, :_destroy],
       cooking_ingredients_attributes: [:ingredient_name, :quantity, :unit, :_destroy]
     )
   end
 
-  # def public_post?
-  #   # フォームから送信されたパラメーターにrecipe[public_post]が存在するかをチェック
-  #   params["recipe"] && params["recipe"]["public_post"].present?
-  # end
-end
+  def public_post?
+    # フォームから送信されたパラメーターにrecipe[public_post]が存在するかをチェック
+    params["recipe"] && params["recipe"]["public_post"].present?
+  end
 
+
+end
