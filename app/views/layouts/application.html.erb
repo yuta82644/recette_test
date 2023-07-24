@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>RecetteTestApp</title>
+    
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +12,26 @@
   </head>
 
   <body>
+    <div>あなたの名前: <%= current_user&.name %></div>
+     <% if @room %>
+    <%= link_to "ルームに入る", rooms_path(@room), class: "btn btn-primary" %>
+  <% end %>
+  
+    <% if user_signed_in? %>
+      <%= link_to "ブログ投稿", recipes_path %>
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "新規登録", new_user_registration_path %>
+      <%= link_to "ログイン", new_user_session_path %>
+    <% end %>
+
+    <% if notice %>
+        <p class="alert alert-notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert alert-error"><%= alert %></p>
+      <% end %>
+
     <%= yield %>
   </body>
 </html>

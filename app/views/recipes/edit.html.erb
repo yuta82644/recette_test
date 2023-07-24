@@ -1,0 +1,96 @@
+<h1>レシピ編集</h1>
+
+<%= form_with(model: @recipe, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :short_comment %>
+    <%= f.text_area :short_comment, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :tortal_quantity %>
+    <%= f.text_area :tortal_quantity, class: "form-control" %>
+  </div>
+
+  <h2>材料</h2>
+  <div id="cooking_ingredients">
+    <%= f.fields_for :cooking_ingredients do |ingredient| %>
+      <div class="ingredient-row">
+        <div class="form-group">
+          <%= ingredient.label :ingredient_name %>
+          <%= ingredient.text_field :ingredient_name, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= ingredient.label :quantity %>
+          <%= ingredient.number_field :quantity, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= ingredient.label :unit %>
+          <%= ingredient.text_field :unit, class: "form-control" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <button type="button" class="btn btn-primary" id="addIngredient">材料を追加</button>
+
+  <h2>手順</h2>
+  <%= f.fields_for :procedures do |step| %>
+    <div class="form-group">
+      <%= step.label :procedure_comment %>
+      <%= step.text_area :procedure_comment, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "レシピを更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const addButton = document.getElementById("addIngredient");
+    const ingredientContainer = document.getElementById("cooking_ingredients");
+
+    let ingredientCount = <%= @recipe.cooking_ingredients.length %>;
+
+    addButton.addEventListener("click", function() {
+      const newIngredient = `
+        <div class="ingredient-row">
+          <div class="form-group">
+            <label for="recipe_cooking_ingredients_attributes_${ingredientCount}_ingredient_name">材料名</label>
+            <input type="text" name="recipe[cooking_ingredients_attributes][${ingredientCount}][ingredient_name]" id="recipe_cooking_ingredients_attributes_${ingredientCount}_ingredient_name" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label for="recipe_cooking_ingredients_attributes_${ingredientCount}_quantity">数量</label>
+            <input type="number" name="recipe[cooking_ingredients_attributes][${ingredientCount}][quantity]" id="recipe_cooking_ingredients_attributes_${ingredientCount}_quantity" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label for="recipe_cooking_ingredients_attributes_${ingredientCount}_unit">単位</label>
+            <input type="text" name="recipe[cooking_ingredients_attributes][${ingredientCount}][unit]" id="recipe_cooking_ingredients_attributes_${ingredientCount}_unit" class="form-control" />
+          </div>
+
+          <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">削除</button>
+        </div>
+      `;
+
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = newIngredient.trim();
+      ingredientContainer.appendChild(wrapper.firstChild);
+
+      ingredientCount++;
+    });
+
+    function removeIngredient(button) {
+      button.closest(".ingredient-row").remove();
+    }
+  });
+</script>

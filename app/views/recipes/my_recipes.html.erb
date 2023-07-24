@@ -1,0 +1,15 @@
+<!-- app/views/recipes/my_recipes.html.erb -->
+<h1>My Recipes</h1>
+<% if @user_recipes.any? %>
+  <ul>
+    <% @user_recipes.each do |recipe| %>
+      <li>
+        <%= link_to recipe.title, recipe_path(recipe) %>
+        <%= link_to "Edit", edit_recipe_path(recipe) %>
+        <%= link_to "Delete", recipe_path(recipe), method: :delete, data: { confirm: "Are you sure you want to delete this recipe?" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You haven't posted any recipes yet.</p>
+<% end %>
